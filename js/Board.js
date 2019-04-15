@@ -162,8 +162,11 @@
 		this.mvLast = mv;
 		//清除本次已选择的棋子
 		this.sqSelected = 0;
-
-		search(this.squares);
+		//如果游戏结束
+		if(game.position.isMate()){
+			var result = computerMove ? "CONGRATULATION! YOU WIN !!!" : "YOU lOSE"
+			alert(result);
+		}
 	}
 	//电脑走棋
 	Board.prototype.response = function(){
@@ -176,7 +179,7 @@
 		game.thinking.style.display = "block";
 		var self = this;
 		setTimeout(function(){
-			var result = search(self.squares);
+			var result = game.search.searchMain(self.squares);
 			if(result != 0){
 				self.addMove(result,true);
 			}

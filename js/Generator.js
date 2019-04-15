@@ -20,7 +20,7 @@
 			}
 			switch(pcSrc - pcSelfSide){
 				case game.board.PIECE_KING: // 将
-					console.log("将");
+					/*console.log("将");*/
 					var delta;
 					for(var i=0;i<4;i++){
 						delta = game.position.KING_DELTA[i];
@@ -34,12 +34,12 @@
 						//如果棋子为空子或者为对方棋子
 						if((pcDst & pcSelfSide) == 0){
 							mvs.push(game.position.move(sqSrc,sqDst));
-							console.log(game.position.move(sqSrc,sqDst));
+							/*console.log(game.position.move(sqSrc,sqDst));*/
 						}
 					}
 					break;
 				case game.board.PIECE_ADVISOR: //士
-				console.log("士");
+				/*console.log("士");*/
 					var delta;
 					for(var i=0;i<4;i++){
 						delta = game.position.ADVISOR_DELTA[i];
@@ -53,12 +53,12 @@
 						//如果棋子为空子或者为对方棋子
 						if((pcDst & pcSelfSide) == 0){
 							mvs.push(game.position.move(sqSrc,sqDst));
-							console.log(game.position.move(sqSrc,sqDst));
+							/*console.log(game.position.move(sqSrc,sqDst));*/
 						}
 					}
 					break;
 				case game.board.PIECE_BISHOP: //象
-					console.log("象");
+					/*console.log("象");*/
 					var delta;
 					for(var i=0;i<4;i++){
 						delta = game.position.ADVISOR_DELTA[i];
@@ -82,12 +82,12 @@
 						//如果终点为对方棋子或者为空
 						if((pcDst & pcSelfSide) == 0){
 							mvs.push(game.position.move(sqSrc,sqDst));
-							console.log(game.position.move(sqSrc,sqDst));
+							/*console.log(game.position.move(sqSrc,sqDst));*/
 						}
 					}
 					break;
 				case game.board.PIECE_KNIGHT: //马
-					console.log("马");
+					/*console.log("马");*/
 					for(var i=0;i<4;i++){
 						//马腿
 						var leg = sqSrc + game.position.KING_DELTA[i];
@@ -104,13 +104,13 @@
 							var pcDst = squares[sqDst];
 							if((pcDst & pcSelfSide) == 0){
 								mvs.push(game.position.move(sqSrc,sqDst));
-								console.log(game.position.move(sqSrc,sqDst));
+								/*console.log(game.position.move(sqSrc,sqDst));*/
 							}
 						}
 					}
 					break;
 				case game.board.PIECE_ROOK: //车
-					console.log("车");
+					/*console.log("车");*/
 					var delta;
 					for(var i=0;i<4;i++){
 						delta = game.position.KING_DELTA[i];
@@ -118,7 +118,7 @@
 						var sqDst = sqSrc + delta;
 						while(game.board.inBoard(sqDst) && squares[sqDst] == 0){
 							mvs.push(game.position.move(sqSrc,sqDst));
-							console.log(game.position.move(sqSrc,sqDst));
+							/*console.log(game.position.move(sqSrc,sqDst));*/
 							sqDst += delta;
 						}
 						//如果此时 终点仍在真实数组内，则此时的终点必定遇到了棋子
@@ -126,13 +126,13 @@
 							var pcDst = squares[sqDst];
 							if((pcDst & pcSelfSide) == 0){
 								mvs.push(game.position.move(sqSrc,sqDst));
-								console.log(game.position.move(sqSrc,sqDst));
+								/*console.log(game.position.move(sqSrc,sqDst));*/
 							}
 						}
 					}
 					break;
 				case game.board.PIECE_CANNON: //炮
-					console.log("炮");
+					/*console.log("炮");*/
 					var delta;
 					for(var i=0;i<4;i++){
 						delta = game.position.KING_DELTA[i];
@@ -140,7 +140,7 @@
 						var sqDst = sqSrc + delta;
 						while(game.board.inBoard(sqDst) && squares[sqDst] == 0){
 							mvs.push(game.position.move(sqSrc,sqDst));
-							console.log(game.position.move(sqSrc,sqDst));
+							/*console.log(game.position.move(sqSrc,sqDst));*/
 							sqDst += delta;
 						}
 						//如果此时 终点仍在真实数组内，则此时的终点必定遇到了棋子
@@ -155,21 +155,21 @@
 								var pcDst = squares[sqDst];
 								if((pcDst & pcOppside) != 0){
 									mvs.push(game.position.move(sqSrc,sqDst));
-									console.log(game.position.move(sqSrc,sqDst));
+									/*console.log(game.position.move(sqSrc,sqDst));*/
 								}
 							}
 						}
 					}
 					break;
 				case game.board.PIECE_PAWN:
-					console.log("兵");
+					/*console.log("兵");*/
 					//前进一步，获得对应的位置
 					var sqDst = game.position.forwardOneStep(sqSrc,game.board.sdPlayer);
 					if(game.board.inBoard(sqDst)){
 						var pcDst = squares[sqDst];
 						if((pcDst & pcSelfSide) == 0){
 							mvs.push(game.position.move(sqSrc,sqDst));
-							console.log(game.position.move(sqSrc,sqDst));
+							/*console.log(game.position.move(sqSrc,sqDst));*/
 						}
 					}
 					//如果兵已过河
@@ -180,7 +180,7 @@
 								var pcDst = squares[sqDst];
 								if((pcDst & pcSelfSide) == 0){
 									mvs.push(game.position.move(sqSrc,sqDst));
-									console.log(game.position.move(sqSrc,sqDst));
+									/*console.log(game.position.move(sqSrc,sqDst));*/
 								}
 							}
 						}

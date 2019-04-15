@@ -25,6 +25,7 @@
 		this.KING_DELTA = [-16,-1,1,16]; //将
 	 	this.ADVISOR_DELTA = [-17,-15,15,17];//士 ， 象棋为 *2
 		this.KNIGHT_DELTA = [[-33,-31],[-18,14],[-14,18],[31,33]] //马，对应的马脚为 KING_DELTA
+		this.KNIGHT_CHECK_DELTA = [[-33, -18], [-31, -14], [14, 31], [18, 33]];
 		this.init();
 	}
 	Position.prototype.init = function(){
@@ -50,6 +51,12 @@
 	//尝试走一步棋,mv 走法  squares 棋盘数组
 	Position.prototype.makeMove = function(mv,squares){
 		this.movePiece(mv,squares);
+		//若尝试走一个棋子，会被将军
+		if(this.checked(squares)){
+			//取消这一步走法
+			this.undoMovePiece(squares);
+			return false;
+		}
 		this.changeSide();
 		this.step++;
 		return true;
@@ -79,8 +86,8 @@
 		//取出最近一次的走法
 		var mv = this.mvList.pop();
 		//根据走法获得起点、终点，以及对应的棋子
-		var sqSrc = this.getSqSrc(sqSrc);
-		var sqDst = this.getSqDst(sqDst);
+		var sqSrc = this.getSqSrc(mv);
+		var sqDst = this.getSqDst(mv);
 		var pcDst = squares[sqDst];
 
 		//取出最后一次吃子
@@ -160,6 +167,86 @@
 			default:
 				return false;	
 		}
+	}
+
+	//检测 “将” 是否会被攻击
+	Position.prototype.checked = function(squares){
+		var pcSelfSide = game.board.sideFlag(game.board.sdPlayer);
+		var pcOppside = game.board.oppSideFlag(game.board.sdPlayer);
+		//搜索整个棋盘,找到本方的将棋
+		for(var sq=0;sq<256;sq++){
+			if(squares[sq] - pcSelfSide != game.board.PIECE_KING){
+				continue;
+			}
+			// 将 “将”棋当做兵棋，走一步，如果遇到对方的兵棋，说明对方的兵棋可以威胁到我方的“将”棋
+			if(squares[this.forwardOneStep(sq,game.board.sdPlayer)] == game.board.PIECE_PAWN + pcOppside){
+				return true;
+			}
+			// 向左向右走，若遇到对方兵棋，说明有威胁
+			if(squares[sq - 1] == game.board.PIECE_PAWN + pcOppside 
+				|| squares[sq + 1] == game.board.PIECE_PAWN + pcOppside){
+				return true;
+			}
+			//是否可以被“马”将军
+			for(var i=0;i<4;i++){
+				//四个方向的马脚分别为
+				var sqPin = this.ADVISOR_DELTA[i] + sq;
+				if(sqPin != 0){
+					continue;
+				}
+				//马脚对应的马的位置
+				for(var j=-1;j+=2;j<2){
+					var sqDst = this.KNIGHT_CHECK_DELTA[i][j] + sq;
+					if(squares[sqDst] == game.board.PIECE_KNIGHT + pcOppside){
+						return true;
+					}
+				}
+			}
+
+			//是否可以被车将军
+			for(var i=0;i<4;i++){
+				var delta = this.KING_DELTA[i];
+				var sqDst = sq + delta;
+				while(game.board.inBoard(sqDst)){
+					//若此时遇到了棋子，且棋子是车或对方的将,则会被将军
+					var pcDst = squares[sqDst];
+					if(pcDst > 0){
+						if(pcDst == game.board.PIECE_KING + pcOppside || pcDst == game.board.PIECE_ROOK + pcOppside){
+							return true;
+						}
+						break;
+					}
+					sqDst += delta;
+				}
+				sqDst += delta;
+				//此时已经翻山,判断下次遇到的棋子，是否是对方的“炮”
+				while(game.board.inBoard(sqDst)){
+					var pcDst = squares[sqDst];
+					if(pcDst > 0){
+						if(pcDst == game.board.PIECE_CANNON + pcOppside){
+							return true;
+						}
+						break;
+					}
+					sqDst += delta;
+				}
+			}
+			return false;
+		}
+		return false;
+	}
+
+	//是否已被将死,true 为被将死，false为还可以走棋
+	Position.prototype.isMate = function(){
+		var mvs = gen(game.board.squares,game.board.sdPlayer);
+		for(var i=0;i<mvs.length;i++){
+			//尝试一个走法，该走法不会被将军，则说明还可以走棋
+			if(this.makeMove(mvs[i],game.board.squares)){
+				this.undoMakeMove(game.board.squares);
+				return false;
+			}
+		}
+		return true;
 	}
 
 	//判断 “将” 是否在九宫格内

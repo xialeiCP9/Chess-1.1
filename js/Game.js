@@ -32,6 +32,7 @@
 	Game.prototype.start = function(){
 		this.board = new Board();
 		this.position = new Position();
+		this.search = new Search();
 		this.board.init();
 	}
 	//读取资源文件
@@ -76,7 +77,7 @@
 		var self = this;
 		//移动事件
 		this.canvas.onmousemove = function(event){
-			if(this.busy){
+			if(self.board.busy){
 				return;
 			}
 			var pos = Util.getPos(document.querySelector(".box"),event);
