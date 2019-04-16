@@ -26,11 +26,12 @@
 						delta = game.position.KING_DELTA[i];
 						//沿着方向前进
 						var sqDst = sqSrc + delta;
-						var pcDst = squares[sqDst];
+						
 						//如果棋子位置不在九宫格上
-						if(game.position.IN_FORT_[sqDst]){
+						if(!game.position.inFort(sqDst)){
 							continue;
 						}
+						var pcDst = squares[sqDst];
 						//如果棋子为空子或者为对方棋子
 						if((pcDst & pcSelfSide) == 0){
 							mvs.push(game.position.move(sqSrc,sqDst));
@@ -47,7 +48,7 @@
 						var sqDst = sqSrc + delta;
 						var pcDst = squares[sqDst];
 						//如果棋子位置不在九宫格上
-						if(game.position.IN_FORT_[sqDst] == 0){
+						if(!game.position.inFort(sqDst)){
 							continue;
 						}
 						//如果棋子为空子或者为对方棋子
@@ -124,7 +125,7 @@
 						//如果此时 终点仍在真实数组内，则此时的终点必定遇到了棋子
 						if(game.board.inBoard(sqDst)){
 							var pcDst = squares[sqDst];
-							if((pcDst & pcSelfSide) == 0){
+							if((pcDst & pcOppside) != 0){
 								mvs.push(game.position.move(sqSrc,sqDst));
 								/*console.log(game.position.move(sqSrc,sqDst));*/
 							}

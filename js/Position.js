@@ -191,7 +191,8 @@
 			for(var i=0;i<4;i++){
 				//四个方向的马脚分别为
 				var sqPin = this.ADVISOR_DELTA[i] + sq;
-				if(sqPin != 0){
+				var pcPin = squares[pcPin];
+				if(pcPin != 0){
 					continue;
 				}
 				//马脚对应的马的位置
@@ -239,6 +240,7 @@
 	//是否已被将死,true 为被将死，false为还可以走棋
 	Position.prototype.isMate = function(){
 		var mvs = gen(game.board.squares,game.board.sdPlayer);
+		console.log("sdPlayer:",game.board.sdPlayer,"mvs:",mvs);
 		for(var i=0;i<mvs.length;i++){
 			//尝试一个走法，该走法不会被将军，则说明还可以走棋
 			if(this.makeMove(mvs[i],game.board.squares)){

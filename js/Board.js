@@ -164,7 +164,7 @@
 		this.sqSelected = 0;
 		//如果游戏结束
 		if(game.position.isMate()){
-			var result = computerMove ? "CONGRATULATION! YOU WIN !!!" : "YOU lOSE"
+			var result = computerMove ? "你输了" : "你赢了"
 			alert(result);
 		}
 	}
